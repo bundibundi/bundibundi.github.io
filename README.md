@@ -1,5 +1,5 @@
 # Infinity Blade Viewer 
-goals:
+## goals:
 - [ ] Viewer works with a .glb map file exported from the throne from 
 huells' blender maps from IB1 & IB2. The map has to load from the website directly, no uploads required.
 https://drive.google.com/drive/folders/1xKZSLpxey-1om5H7KASuwctDZLlpxapP
