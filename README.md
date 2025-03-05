@@ -1,6 +1,6 @@
 # Infinity Blade Viewer 
 ## What's IBV?
-Visit to  <a href="https://bundibundi.github.io" target="_blank" rel="noopener noreferrer">Infinity Blade Viewer</a>
+Visit <a href="https://bundibundi.github.io" target="_blank" rel="noopener noreferrer">Infinity Blade Viewer</a>
 You can explore the Infinity Blade Map Throne Room. Huell has ported it to blender. I exported his blender map to a single .glb file.
 With the help of DeepSeek, I can't code, I made this. It's using CesiumJS. It's not perfect but it's a start. 
 I don't think it's made for viewing Infinity Blade maps rather for totally different stuff.
