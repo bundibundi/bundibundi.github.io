@@ -1,2 +1,2 @@
 # bundibundi.github.io
-Website for Infinity Blate Viewer
+Website for Infinity Blade Viewer
