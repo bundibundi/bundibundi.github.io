@@ -5,6 +5,8 @@ You can explore the Infinity Blade Map Throne Room. Huell has ported it to blend
 I made this with the help of DeepSeek (I can't code). It's using CesiumJS. It's not perfect but it's a start. 
 I don't think it's made for viewing Infinity Blade maps rather for totally different stuff.
 
+Quick video to show what it looks like atm: https://youtu.be/Zx1QIr5HCzk
+
 Thanks huell for the maps:
 https://drive.google.com/drive/folders/1xKZSLpxey-1om5H7KASuwctDZLlpxapP
 
