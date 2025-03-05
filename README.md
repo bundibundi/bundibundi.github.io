@@ -1,2 +1,2 @@
 # bundibundi.github.io
-website IB maps
+Website for Infinity Blate Viewer
