@@ -1,14 +1,32 @@
 # Infinity Blade Viewer 
 ## What's IBV?
-It's a website based on Don Mccurdy's GLTF file viewer. I have some IB maps in blender. They can be converted to .glb format which is a GLTF format.
-This format can be viewed on gltf-viewer. But you can't upload it and share it with someone else. I want to share IB maps and Assets without making people download and upload files to a website. 
-- The source code of his website : https://github.com/donmccurdy/three-gltf-viewer 
-- His website: https://gltf-viewer.donmccurdy.com/
+Visit to https://bundibundi.github.io 
+You can explore the Infinity Blade Map Throne Room. Huell has ported it to blender. I exported his blender map to a single .glb file.
+With the help of DeepSeek, I can't code, I made this. It's using CesiumJS. It's not perfect but it's a start. 
+I don't think it's made for viewing Infinity Blade maps rather for totally different stuff.
+
+Thanks huell for the maps:
+https://drive.google.com/drive/folders/1xKZSLpxey-1om5H7KASuwctDZLlpxapP
+
+Thanks Deepseek for the coding and reading my bad prompts.
+
+## Controls:
+- moving around with WASD
+- faster zoom in and out with mouse wheel
+- left click anywhere, then use mouse to look around
+- orientation can be off, just press spacebar to readjust and use JKIL for looking around up, down, left, right only in one direction
+
+## problems / bugs / challenges
+- lighting, too dark at the moment
+- I can't code XD. I can only run code from AI's like Deekseek, Chatgpt and Grok but I don't understand the "why" if something doesn't work.
+- Rotation / orientation is wrong sometimes. Maybe i can turn/lock the orientation so that movement is just like "noclip" in a videogame or something, so no rotation.
 
 ## goals:
-- [ ] Viewer works with a .glb map file exported from the throne from 
+- [x] Viewer works with a .glb map file exported from the throne from 
 huells' blender maps from IB1 & IB2. The map has to load from the website directly, no uploads required.
+(I've used throne room, removed the white cube in blender, exported to glb file. Then made deepseek AI code me a map viewer + controls from scratch.)
 https://drive.google.com/drive/folders/1xKZSLpxey-1om5H7KASuwctDZLlpxapP
+- [ ] Fix the problems in problems / bugs / challenges section.
 - [ ] Export the other maps with huells' blender files to .glb format and upload to Infinity Blade Viewer and test of maps successful.
 - [ ] Think of what maps to "rebuild" in blender myself. Then try to "rebuild". If successful upload and test map/maps. 
 - [ ] Upload more stuff, if possible, like character models from extracted assets.
