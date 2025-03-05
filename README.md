@@ -16,4 +16,4 @@ https://drive.google.com/drive/folders/1xKZSLpxey-1om5H7KASuwctDZLlpxapP
       https://www.unrealengine.com/en-US/blog/free-infinity-blade-collection-marketplace-release
       The files are still somewhere on the internet. A guy has reuploaded them to github. Would probably find it again if needed.
 - [ ] Buy domain when I've decided on a cool domain name.
-- [ ] Buy hosting or host them myself or stick to github. Idk if github is good for hosting this website.
+- [ ] Buy webhosting or host the website myself or stick with github. Idk if github is good for hosting this website. I have to research.
