@@ -25,7 +25,6 @@ Thanks Deepseek for the coding and reading my bad prompts.
 - [x] Viewer works with a .glb map file exported from the throne from 
 huells' blender maps from IB1 & IB2. The map has to load from the website directly, no uploads required.
 (I've used throne room, removed the white cube in blender, exported to glb file. Then made deepseek AI code me a map viewer + controls from scratch.)
-https://drive.google.com/drive/folders/1xKZSLpxey-1om5H7KASuwctDZLlpxapP
 - [ ] Fix the problems in problems / bugs / challenges section.
 - [ ] Export the other maps with huells' blender files to .glb format and upload to Infinity Blade Viewer and test of maps successful.
 - [ ] Think of what maps to "rebuild" in blender myself. Then try to "rebuild". If successful upload and test map/maps. 
