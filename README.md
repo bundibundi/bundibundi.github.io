@@ -13,7 +13,7 @@ Thanks Deepseek for the coding and reading my bad prompts.
 ## Controls:
 - moving around with WASD
 - faster zoom in and out with mouse wheel
-- left click anywhere, then use mouse to look around
+- left click anywhere, then use mouse to look around (press ESC to see you mouse again)
 - orientation can be off, just press spacebar to readjust and use JKIL for looking around up, down, left, right only in one direction
 
 ## problems / bugs / challenges
