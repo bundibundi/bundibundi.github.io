@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Meine GLB Map mit Babylon.js</title>
+    <title>My GLB Map Viewer</title>
     <style>
         html, body {
             overflow: hidden;
@@ -23,45 +23,44 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
-        // 1. Canvas und Engine initialisieren
+        // 1. Initialize canvas and engine
         const canvas = document.getElementById('renderCanvas');
         const engine = new BABYLON.Engine(canvas, true);
         
-        // 2. Eine Szene erstellen
+        // 2. Create a scene
         const createScene = function() {
             const scene = new BABYLON.Scene(engine);
             
-            // 3. Himmelslicht für Grundbeleuchtung
+            // 3. Basic lighting
             const light = new BABYLON.HemisphericLight("light", 
                 new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
             
-            // 4. DAS IST DIE MAGISCHE KAMERA
-            // UniversalCamera = FPS-Kamera mit WASD + Maus
+            // 4. FPS CAMERA (WASD + Mouse)
             const camera = new BABYLON.UniversalCamera("UniversalCamera", 
                 new BABYLON.Vector3(0, 5, -10), scene);
             
-            // Kameraeinstellungen (wie in einem Spiel)
+            // Camera settings
             camera.attachControl(canvas, true);
-            camera.speed = 0.5;           // Fluggeschwindigkeit
-            camera.angularSensibility = 2000; // Mausempfindlichkeit
-            camera.applyGravity = false;  // Schwerkraft aus (freies Fliegen)
-            camera.checkCollisions = false; // Kollisionen aus
+            camera.speed = 0.5;           // Movement speed
+            camera.angularSensibility = 2000; // Mouse sensitivity
+            camera.applyGravity = false;  // Free flight mode
+            camera.checkCollisions = false; // No collisions
             
-            // Blickpunkt setzen
+            // Set initial target
             camera.setTarget(BABYLON.Vector3.Zero());
             
-            // 5. Deine GLB-Map laden
+            // 5. Load your GLB map
             BABYLON.SceneLoader.ImportMesh("", "./", "map2.glb", scene, 
                 function(meshes) {
-                    console.log("Map geladen!", meshes);
+                    console.log("Map loaded!", meshes);
                     
-                    // Optional: Kamera auf die Map zentrieren
+                    // Center camera on loaded map
                     if (meshes && meshes.length > 0) {
                         const boundingBox = meshes[0].getBoundingInfo().boundingBox;
                         const center = boundingBox.center;
                         
-                        // Kamera in die Nähe der Map setzen
+                        // Position camera near the map
                         camera.position = new BABYLON.Vector3(
                             center.x, 
                             center.y + 5, 
@@ -71,28 +70,28 @@
                     }
                 },
                 function(progress) {
-                    // Fortschrittsanzeige (optional)
-                    console.log(`Lade... ${(progress.loaded / progress.total * 100).toFixed(1)}%`);
+                    // Loading progress (optional)
+                    console.log(`Loading... ${(progress.loaded / progress.total * 100).toFixed(1)}%`);
                 },
                 function(error) {
-                    // Fehlerbehandlung
-                    console.error("Fehler beim Laden der Map:", error.message);
-                    alert("Fehler beim Laden der Map. Bitte Konsole prüfen.");
+                    // Error handling
+                    console.error("Error loading map:", error.message);
+                    alert("Error loading map. Please check console.");
                 }
             );
             
             return scene;
         };
         
-        // 6. Szene erstellen und Rendern starten
+        // 6. Create scene and start rendering
         const scene = createScene();
         
-        // 7. Render-Loop starten
+        // 7. Start render loop
         engine.runRenderLoop(function() {
             scene.render();
         });
         
-        // 8. Fenstergrößenänderung behandeln
+        // 8. Handle window resize
         window.addEventListener('resize', function() {
             engine.resize();
         });
