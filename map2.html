@@ -24,6 +24,11 @@
             position: Cesium.Cartesian3.fromDegrees(-75.170726, 39.920866, 100), // Position (Longitude, Latitude, Altitude)
             model: {
                 uri: 'map2.glb',
+                // === NEUER HELLIGKEITS-FIX (aus Cesium-Forum) ===
+                imageBasedLighting: {
+                    imageBasedLightingFactor: new Cesium.Cartesian2(0.0, 0.0)  // Deaktiviert den dunklen Environment-Map-Effekt komplett → Modell wird viel heller!
+                }
+                // === ENDE FIX ===
             },
         });
 
@@ -34,23 +39,9 @@
         // Zoom to the entity
         viewer.zoomTo(entity);
 
-        // === HELLIGKEITS-FIX (das macht die Map richtig hell) ===
+        // Optional: Noch etwas Grundbeleuchtung (kann helfen, ist aber meist nicht mehr nötig)
         viewer.scene.globe.enableLighting = true;
         viewer.scene.skyAtmosphere.show = true;
-        viewer.scene.sun.show = true;
-        viewer.scene.moon.show = true;
-
-        // Starkes direktionales Licht (wie eine Sonne/Lampe)
-        viewer.scene.light = new Cesium.DirectionalLight({
-            direction : new Cesium.Cartesian3(0.5, -0.5, -1.0), // Licht von oben-rechts-vorne
-            color     : Cesium.Color.WHITE,
-            intensity : 4.0  // 3.0–6.0 je nach gewünschter Helligkeit (4.0 ist ein guter Start)
-        });
-
-        // Optional: Noch etwas mehr globale Helligkeit
-        viewer.scene.lightIntensity = 2.0;
-        viewer.scene.highDynamicRange = false; // Manchmal macht HDR Modelle dunkler
-        // === ENDE HELLIGKEITS-FIX ===
 
         // First-person camera controls
         const camera = viewer.scene.camera;
