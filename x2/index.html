@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Selection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h1 i {
+            color: #4ecdc4;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        .maps-container {
+            padding: 40px 30px;
+        }
+        
+        .maps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .map-button {
+            display: block;
+            text-decoration: none;
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            padding: 25px 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 7px 15px rgba(52, 152, 219, 0.3);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(to right, #2980b9, #1f639b);
+        }
+        
+        .map-button:active {
+            transform: translateY(-2px);
+        }
+        
+        .map-button i {
+            margin-right: 15px;
+            font-size: 2rem;
+            vertical-align: middle;
+        }
+        
+        .map-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+        
+        .map-button:hover::after {
+            left: 100%;
+        }
+        
+        /* Color variations for different buttons */
+        .map-button:nth-child(3n+1) {
+            background: linear-gradient(to right, #9b59b6, #8e44ad);
+            box-shadow: 0 7px 15px rgba(155, 89, 182, 0.3);
+        }
+        
+        .map-button:nth-child(3n+1):hover {
+            background: linear-gradient(to right, #8e44ad, #7d3c98);
+            box-shadow: 0 12px 20px rgba(155, 89, 182, 0.4);
+        }
+        
+        .map-button:nth-child(3n+2) {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            box-shadow: 0 7px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .map-button:nth-child(3n+2):hover {
+            background: linear-gradient(to right, #c0392b, #a93226);
+            box-shadow: 0 12px 20px rgba(231, 76, 60, 0.4);
+        }
+        
+        .map-button:nth-child(3n+3) {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            box-shadow: 0 7px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .map-button:nth-child(3n+3):hover {
+            background: linear-gradient(to right, #27ae60, #219653);
+            box-shadow: 0 12px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background-color: #f8f9fa;
+            color: #666;
+            border-top: 1px solid #eee;
+            font-size: 1rem;
+        }
+        
+        .instruction {
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: #888;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1100px) {
+            .maps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .maps-container {
+                padding: 30px 20px;
+            }
+            
+            .maps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+                gap: 20px;
+            }
+            
+            .map-button {
+                padding: 22px 15px;
+                font-size: 1.6rem;
+            }
+            
+            .map-button i {
+                font-size: 1.8rem;
+                margin-right: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 15px;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .map-button {
+                padding: 20px 15px;
+                font-size: 1.5rem;
+            }
+            
+            .map-button i {
+                font-size: 1.6rem;
+                margin-right: 10px;
+            }
+        }
+        
+        /* Animation for loading effect */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .map-button {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Delay for each element */
+        .map-button:nth-child(1) { animation-delay: 0.1s; }
+        .map-button:nth-child(2) { animation-delay: 0.2s; }
+        .map-button:nth-child(3) { animation-delay: 0.3s; }
+        .map-button:nth-child(4) { animation-delay: 0.4s; }
+        .map-button:nth-child(5) { animation-delay: 0.5s; }
+        .map-button:nth-child(6) { animation-delay: 0.6s; }
+        .map-button:nth-child(7) { animation-delay: 0.7s; }
+        .map-button:nth-child(8) { animation-delay: 0.8s; }
+        .map-button:nth-child(9) { animation-delay: 0.9s; }
+        .map-button:nth-child(10) { animation-delay: 1.0s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-map-marked-alt"></i> Map Selection</h1>
+            <p class="subtitle">Choose one of the available maps. Each button leads to the corresponding map view. The buttons are optimized for all devices.</p>
+        </header>
+        
+        <main class="maps-container">
+            <div class="maps-grid">
+                <a href="map1.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 1
+                </a>
+                <a href="map2.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 2
+                </a>
+                <a href="map3.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 3
+                </a>
+                <a href="map4.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 4
+                </a>
+                <a href="map5.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 5
+                </a>
+                <a href="map6.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 6
+                </a>
+                <a href="map7.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 7
+                </a>
+                <a href="map8.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 8
+                </a>
+                <a href="map9.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 9
+                </a>
+                <a href="map10.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 10
+                </a>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Map Selection Interface &copy; 2023 | Optimized for Desktop and Mobile</p>
+            <p class="instruction">Click on a map to open it. On mobile devices, the buttons are extra large for easy use.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simple JavaScript code for additional interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.map-button');
+            
+            buttons.forEach(button => {
+                // Add button press effect
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+                
+                // For touch devices
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // Simulate loading animation
+            console.log("Map selection loaded. Buttons are ready!");
+        });
+    </script>
+</body>
+</html>

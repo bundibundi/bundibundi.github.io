@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CesiumJS First-Person Controls</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        body, html { margin: 0; padding: 0; overflow: hidden; }
+        #cesiumContainer { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+    <div id="cesiumContainer"></div>
+    <script>
+        // Initialize Cesium Viewer
+        const viewer = new Cesium.Viewer('cesiumContainer', {
+            terrainProvider: Cesium.createWorldTerrain(), // Enable 3D terrain
+        });
+
+        // Load GLB file
+        const entity = viewer.entities.add({
+            position: Cesium.Cartesian3.fromDegrees(-75.170726, 39.920866, 100), // Position (Longitude, Latitude, Altitude)
+            model: {
+                uri: 'map1.glb',
+            },
+        });
+
+        // Adjust zoom limits
+        viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1; // Minimum zoom distance
+        viewer.scene.screenSpaceCameraController.maximumZoomDistance = 100000; // Maximum zoom distance
+
+        // Zoom to the entity
+        viewer.zoomTo(entity);
+
+        // First-person camera controls
+        const camera = viewer.scene.camera;
+        const moveSpeed = 0.1; // Movement speed (slower)
+        const lookSpeed = 0.002; // Mouse movement speed (slower)
+        const rotateSpeed = 0.02; // Rotation speed for J, I, K, L
+
+        // Capture keyboard inputs
+        const keys = {
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+            j: false, // Rotate left
+            i: false, // Rotate up
+            k: false, // Rotate down
+            l: false, // Rotate right
+            space: false, // Reset camera orientation
+        };
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key in keys) {
+                keys[event.key] = true;
+            }
+            if (event.key === ' ') { // Spacebar
+                keys.space = true;
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            if (event.key in keys) {
+                keys[event.key] = false;
+            }
+            if (event.key === ' ') { // Spacebar
+                keys.space = false;
+            }
+        });
+
+        // Capture mouse movement
+        const canvas = viewer.scene.canvas;
+        let isMouseLocked = false;
+
+        // Lock mouse pointer
+        canvas.addEventListener('click', () => {
+            canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+            canvas.requestPointerLock();
+        });
+
+        // Process mouse movement
+        document.addEventListener('mousemove', (event) => {
+            if (document.pointerLockElement === canvas) {
+                const { movementX, movementY } = event;
+                camera.lookRight(movementX * lookSpeed); // Rotate horizontally
+                camera.lookUp(-movementY * lookSpeed); // Rotate vertically
+            }
+        });
+
+        // Update camera movement and rotation
+        viewer.clock.onTick.addEventListener(() => {
+            // Movement
+            if (keys.w) {
+                camera.moveForward(moveSpeed); // Move forward
+            }
+            if (keys.s) {
+                camera.moveBackward(moveSpeed); // Move backward
+            }
+            if (keys.a) {
+                camera.moveLeft(moveSpeed); // Move left
+            }
+            if (keys.d) {
+                camera.moveRight(moveSpeed); // Move right
+            }
+
+            // Rotation with J, I, K, L
+            if (keys.j) {
+                camera.lookLeft(rotateSpeed); // Rotate left
+            }
+            if (keys.i) {
+                camera.lookUp(rotateSpeed); // Rotate up
+            }
+            if (keys.k) {
+                camera.lookDown(rotateSpeed); // Rotate down
+            }
+            if (keys.l) {
+                camera.lookRight(rotateSpeed); // Rotate right
+            }
+
+            // Reset camera orientation with spacebar
+            if (keys.space) {
+                const heading = Cesium.Math.toRadians(0); // Reset heading (left/right rotation)
+                const pitch = Cesium.Math.toRadians(0); // Reset pitch (up/down rotation)
+                const roll = Cesium.Math.toRadians(0); // Reset roll (tilt)
+                camera.setView({
+                    orientation: {
+                        heading: heading,
+                        pitch: pitch,
+                        roll: roll,
+                    },
+                });
+            }
+        });
+    </script>
+</body>
+</html>
