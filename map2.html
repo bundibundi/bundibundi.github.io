@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>GLB Map - Bright Version</title>
+    <title>GLB Map - ULTRA BRIGHT</title>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <style>
@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    <div id="status">Click screen → Use WASD + Mouse</div>
+    <div id="status">ULTRA BRIGHT MODE</div>
     <canvas id="renderCanvas" tabindex="0"></canvas>
     
     <script>
@@ -20,47 +20,38 @@
         const engine = new BABYLON.Engine(canvas, true);
         const scene = new BABYLON.Scene(engine);
         
-        // ========== MAXIMUM BRIGHTNESS - NO SHADOWS ==========
-        // 1. Main ambient light (increased intensity)
-        const ambientLight = new BABYLON.HemisphericLight("ambient", new BABYLON.Vector3(0, 1, 0), scene);
-        ambientLight.intensity = 1.5;
-        ambientLight.groundColor = new BABYLON.Color3(1, 1, 1); // White ground
-        ambientLight.diffuse = new BABYLON.Color3(1, 1, 1); // Pure white
+        // ========== NUCLEAR LIGHTING ==========
+        // 1. Sky light
+        const ambient = new BABYLON.HemisphericLight("ambient", new BABYLON.Vector3(0, 1, 0), scene);
+        ambient.intensity = 3.0;
+        ambient.groundColor = new BABYLON.Color3(1, 1, 1);
+        ambient.diffuse = new BABYLON.Color3(1, 1, 1);
         
-        // 2. Directional light from front (like studio lighting)
-        const mainLight = new BABYLON.DirectionalLight("mainLight", new BABYLON.Vector3(0, -1, -1), scene);
-        mainLight.intensity = 2.0;
-        mainLight.diffuse = new BABYLON.Color3(1, 1, 1);
-        
-        // 3. Fill light from opposite side
-        const fillLight = new BABYLON.DirectionalLight("fillLight", new BABYLON.Vector3(0, -1, 1), scene);
-        fillLight.intensity = 1.0;
-        fillLight.diffuse = new BABYLON.Color3(1, 1, 1);
-        
-        // 4. DISABLE ALL SHADOWS (for maximum brightness)
-        ambientLight.shadowEnabled = false;
-        mainLight.shadowEnabled = false;
-        fillLight.shadowEnabled = false;
-        
-        // ========== CAMERA (unchanged) ==========
+        // 2. Camera light (follows you)
         const camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 5, -15), scene);
         camera.attachControl(canvas, true);
-        camera.speed = 0.5; // Slower movement
+        camera.speed = 0.5;
         camera.angularSensibility = 3000;
         camera.applyGravity = false;
         camera.checkCollisions = false;
         
-        camera.keysUp = [87];
-        camera.keysLeft = [65];
-        camera.keysDown = [83];
-        camera.keysRight = [68];
-        camera.keysUpward = [69];
-        camera.keysDownward = [81];
+        const camLight = new BABYLON.PointLight("camLight", camera.position, scene);
+        camLight.intensity = 4.0;
+        camLight.diffuse = new BABYLON.Color3(1, 1, 1);
+        camLight.parent = camera;
         
-        // ========== LOAD MODEL ==========
+        camera.keysUp = [87]; camera.keysLeft = [65];
+        camera.keysDown = [83]; camera.keysRight = [68];
+        camera.keysUpward = [69]; camera.keysDownward = [81];
+        
+        // 3. Post-processing exposure
+        scene.imageProcessingConfiguration.contrast = 1.2;
+        scene.imageProcessingConfiguration.exposure = 2.5;
+        
+        // ========== LOAD & OVERRIDE MATERIALS ==========
         BABYLON.SceneLoader.ImportMesh("", "./", "map2.glb", scene, (meshes) => {
             console.log("Loaded:", meshes.length, "meshes");
-            document.getElementById('status').textContent = "READY: Click screen → WASD + Mouse";
+            document.getElementById('status').textContent = "READY: ULTRA BRIGHT MODE";
             
             if(meshes.length > 0) {
                 const box = meshes[0].getBoundingInfo().boundingBox;
@@ -68,21 +59,21 @@
                 camera.position.set(center.x, center.y + 3, center.z - 15);
                 camera.setTarget(center);
                 
-                // OPTIONAL: Force bright material on all meshes
+                // MATERIAL OVERRIDE - FORCE BRIGHT
                 meshes.forEach(mesh => {
                     if (mesh.material) {
-                        mesh.material.ambientColor = new BABYLON.Color3(1, 1, 1);
-                        mesh.material.specularColor = new BABYLON.Color3(0, 0, 0); // No shiny highlights
+                        const brightMat = new BABYLON.StandardMaterial("bright", scene);
+                        brightMat.diffuseColor = new BABYLON.Color3(1, 1, 1);
+                        brightMat.emissiveColor = new BABYLON.Color3(0.7, 0.7, 0.7);
+                        brightMat.ambientColor = new BABYLON.Color3(1, 1, 1);
+                        mesh.material = brightMat;
                     }
                 });
             }
         });
         
-        // ========== FOCUS FIX ==========
         canvas.addEventListener('click', () => canvas.focus());
         canvas.focus();
-        
-        // ========== RENDER LOOP ==========
         engine.runRenderLoop(() => scene.render());
         window.addEventListener('resize', () => engine.resize());
     </script>
