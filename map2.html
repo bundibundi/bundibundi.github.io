@@ -39,53 +39,45 @@
     <script>
         const canvas = document.getElementById('renderCanvas');
         const engine = new BABYLON.Engine(canvas, true);
-        
+
         const createScene = function() {
             const scene = new BABYLON.Scene(engine);
-            
+
             // Lighting
-            const light = new BABYLON.HemisphericLight("light", 
+            const light = new BABYLON.HemisphericLight("light",
                 new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.8;
-            
+
             // FPS CAMERA - FIXED VERSION
-            const camera = new BABYLON.UniversalCamera("UniversalCamera", 
+            const camera = new BABYLON.UniversalCamera("UniversalCamera",
                 new BABYLON.Vector3(0, 2, -5), scene);
-            
-            // CAMERA SETUP WITH ALL MOVEMENT ENABLED
+
+            // CORRECTION: Camera setup with all movement enabled
             camera.attachControl(canvas, true);
-            camera.inputs.addMouse();  // CRITICAL: Enables mouse look
-            
-            // Movement settings
+
+            // Movement settings - Just set the speed and sensitivity
             camera.speed = 0.3;           // Walking speed
             camera.angularSensibility = 2500; // Mouse sensitivity
             camera.applyGravity = false;  // Free flight mode
             camera.checkCollisions = false;
-            
-            // Keys for vertical movement
-            camera.keysUp.push(69);    // E key (move up)
-            camera.keysDown.push(81);  // Q key (move down)
-            
-            // Standard WASD keys are already configured
-            camera.keysLeft.push(65);  // A
-            camera.keysRight.push(68); // D
-            camera.keysForward.push(87); // W
-            camera.keysBackward.push(83); // S
-            
+
+            // CRITICAL FIX: DO NOT manually push keys. The UniversalCamera uses a different system.
+            // Remove or comment out all lines like: camera.keysUp.push(69);
+
             camera.setTarget(new BABYLON.Vector3(0, 2, 0));
-            
+
             // Load GLB map
-            BABYLON.SceneLoader.ImportMesh("", "./", "map2.glb", scene, 
+            BABYLON.SceneLoader.ImportMesh("", "./", "map2.glb", scene,
                 function(meshes) {
                     console.log("Map loaded!", meshes);
-                    
+
                     if (meshes && meshes.length > 0) {
                         const boundingBox = meshes[0].getBoundingInfo().boundingBox;
                         const center = boundingBox.center;
-                        
+
                         // Position camera at human height
                         camera.position = new BABYLON.Vector3(
-                            center.x, 
+                            center.x,
                             center.y + 1.7,  // Human eye height
                             center.z - 3
                         );
@@ -101,16 +93,16 @@
                     console.error("Error loading map:", error);
                 }
             );
-            
+
             return scene;
         };
-        
+
         const scene = createScene();
-        
+
         engine.runRenderLoop(function() {
             scene.render();
         });
-        
+
         window.addEventListener('resize', function() {
             engine.resize();
         });
