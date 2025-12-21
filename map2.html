@@ -2,211 +2,53 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Ultimate GLB Viewer</title>
+    <title>GLB Map Viewer</title>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <style>
-        body, html { margin:0; padding:0; width:100%; height:100%; overflow:hidden; font-family:Arial; }
+        body, html { margin:0; padding:0; width:100%; height:100%; }
         #renderCanvas { width:100%; height:100%; display:block; }
-        
-        /* Collapsible Menu */
-        #uiContainer {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            width: 300px;
-            max-height: 90vh;
-            overflow-y: auto;
+        #status { position:absolute; top:15px; left:15px; color:white; background:rgba(0,0,0,0.5); padding:10px; font-family:Arial; }
+        #brightnessControl { 
+            position:absolute; 
+            top:60px; 
+            left:15px; 
+            color:white; 
+            background:rgba(0,0,0,0.5); 
+            padding:10px; 
+            font-family:Arial;
+            border-radius: 5px;
         }
-        
-        .menu-section {
-            margin-bottom: 15px;
-            border-bottom: 1px solid #444;
-            padding-bottom: 10px;
-        }
-        
-        .menu-header {
-            cursor: pointer;
-            padding: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            margin-bottom: 8px;
-            user-select: none;
-        }
-        
-        .menu-header:hover {
-            background: rgba(255,255,255,0.2);
-        }
-        
-        .menu-content {
-            padding: 0 10px;
-            display: block; /* Start expanded */
-        }
-        
-        .menu-content.collapsed {
-            display: none;
-        }
-        
-        .control-row {
-            margin: 8px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        label { font-size: 14px; }
-        input[type="range"] { width: 120px; }
-        input[type="checkbox"] { margin-right: 8px; }
-        button { 
-            padding: 6px 12px; 
-            margin: 4px;
-            background: #4a6fa5; 
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover { background: #5a7fb5; }
-        
-        #coordsDisplay {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.7);
-            color: #0f0;
-            padding: 8px;
-            font-family: monospace;
-            font-size: 12px;
-            border-radius: 4px;
+        #brightSlider {
+            width: 150px;
+            vertical-align: middle;
         }
     </style>
 </head>
 <body>
-    <!-- Collapsible Menu -->
-    <div id="uiContainer">
-        <h3 style="margin-top:0; text-align:center;">📊 ULTIMATE VIEWER</h3>
-        
-        <!-- 📍 Navigation -->
-        <div class="menu-section">
-            <div class="menu-header" onclick="toggleSection('nav')">🎮 Navigation</div>
-            <div id="nav-content" class="menu-content">
-                <div class="control-row">
-                    <label>Flight Speed:</label>
-                    <input type="range" id="speedSlider" min="0.1" max="20.0" value="0.5" step="0.1">
-                    <span id="speedValue">0.5</span>
-                </div>
-                <div class="control-row">
-                    <label>Mouse Sens:</label>
-                    <input type="range" id="mouseSlider" min="500" max="10000" value="3000" step="100">
-                    <span id="mouseValue">3000</span>
-                </div>
-                <button onclick="resetCamera()">Reset Camera</button>
-            </div>
-        </div>
-        
-        <!-- 🌍 Visual Effects -->
-        <div class="menu-section">
-            <div class="menu-header" onclick="toggleSection('visual')">🌍 Visual Effects</div>
-            <div id="visual-content" class="menu-content">
-                <div class="control-row">
-                    <label>Brightness:</label>
-                    <input type="range" id="brightSlider" min="0.1" max="10.0" value="1.0" step="0.1">
-                    <span id="brightValue">1.0</span>
-                </div>
-                <div class="control-row">
-                    <label>Fog Density:</label>
-                    <input type="range" id="fogSlider" min="0" max="0.1" value="0" step="0.001">
-                    <span id="fogValue">0.000</span>
-                </div>
-                <div class="control-row">
-                    <input type="checkbox" id="wireframeToggle"> Wireframe
-                </div>
-                <div class="control-row">
-                    <input type="checkbox" id="bboxToggle"> Bounding Boxes
-                </div>
-                <div class="control-row">
-                    <input type="checkbox" id="gridToggle"> Ground Grid
-                </div>
-            </div>
-        </div>
-        
-        <!-- 🌗 Day/Night -->
-        <div class="menu-section">
-            <div class="menu-header" onclick="toggleSection('time')">🌗 Day/Night</div>
-            <div id="time-content" class="menu-content">
-                <div class="control-row">
-                    <button onclick="setDay()">Day</button>
-                    <button onclick="setNight()">Night</button>
-                    <button onclick="setSunset()">Sunset</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 🗺️ Map Controls -->
-        <div class="menu-section">
-            <div class="menu-header" onclick="toggleSection('map')">🗺️ Map Controls</div>
-            <div id="map-content" class="menu-content">
-                <div class="control-row">
-                    <label>Map Scale:</label>
-                    <input type="range" id="scaleSlider" min="0.1" max="5.0" value="1.0" step="0.1">
-                    <span id="scaleValue">1.0</span>
-                </div>
-                <div class="control-row">
-                    <label>Map Rotation:</label>
-                    <input type="range" id="rotateSlider" min="0" max="360" value="0" step="1">
-                    <span id="rotateValue">0°</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 📊 Debug Info -->
-        <div class="menu-section">
-            <div class="menu-header" onclick="toggleSection('debug')">📊 Debug Info</div>
-            <div id="debug-content" class="menu-content">
-                <div class="control-row">
-                    <button onclick="logSceneInfo()">Log Scene Info</button>
-                </div>
-                <div class="control-row">
-                    <button onclick="takeScreenshot()">📸 Screenshot</button>
-                </div>
-                <div class="control-row">
-                    <input type="checkbox" id="fpsToggle"> Show FPS Counter
-                </div>
-            </div>
-        </div>
+    <div id="status">Click screen → WASD + Mouse</div>
+    <div id="brightnessControl">
+        Brightness: <input type="range" id="brightSlider" min="0.1" max="5.0" value="1.0" step="0.1"> 
+        <span id="brightValue">1.0</span>
     </div>
-    
-    <!-- Coordinates Display -->
-    <div id="coordsDisplay">X: 0.00 | Y: 0.00 | Z: 0.00</div>
-    
-    <!-- Canvas -->
     <canvas id="renderCanvas" tabindex="0"></canvas>
     
     <script>
-        // ========== INIT ==========
         const canvas = document.getElementById('renderCanvas');
         const engine = new BABYLON.Engine(canvas, true);
         const scene = new BABYLON.Scene(engine);
         
-        // ========== SCENE SETUP ==========
-        let light, camera, mapMeshes = [], originalMaterials = new Map();
-        
-        // Light
-        light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+        // Basic light
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
         light.intensity = 1.0;
         
         // Camera
-        camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 5, -10), scene);
+        const camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 5, -10), scene);
         camera.attachControl(canvas, true);
         camera.speed = 0.5;
         camera.angularSensibility = 3000;
-        camera.applyGravity = false;
-        camera.checkCollisions = false;
         
+        // Keys
         camera.keysUp = [87];
         camera.keysLeft = [65];
         camera.keysDown = [83];
@@ -214,36 +56,10 @@
         camera.keysUpward = [69];
         camera.keysDownward = [81];
         
-        // Post-processing
-        scene.imageProcessingConfiguration.toneMappingEnabled = true;
-        scene.imageProcessingConfiguration.exposure = 1.0;
-        
-        // Fog
-        scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
-        scene.fogDensity = 0;
-        scene.fogColor = new BABYLON.Color3(0.9, 0.9, 1);
-        
-        // Grid (initially hidden)
-        const grid = BABYLON.MeshBuilder.CreateGround("grid", {width: 100, height: 100}, scene);
-        const gridMat = new BABYLON.GridMaterial("gridMat", scene);
-        gridMat.majorUnitFrequency = 10;
-        gridMat.minorUnitVisibility = 0.3;
-        gridMat.gridRatio = 1;
-        gridMat.opacity = 0.2;
-        grid.material = gridMat;
-        grid.isVisible = false;
-        
-        // ========== LOAD MODEL ==========
+        // Load model
         BABYLON.SceneLoader.ImportMesh("", "./", "map2.glb", scene, (meshes) => {
-            console.log("Map loaded:", meshes.length, "meshes");
-            mapMeshes = meshes;
-            
-            // Store original materials
-            meshes.forEach(mesh => {
-                if (mesh.material) {
-                    originalMaterials.set(mesh, mesh.material);
-                }
-            });
+            console.log("Map loaded");
+            document.getElementById('status').textContent = "Ready - Click then WASD";
             
             if(meshes.length > 0) {
                 const center = meshes[0].getBoundingInfo().boundingBox.center;
@@ -252,136 +68,34 @@
             }
         });
         
-        // ========== UI FUNCTIONS ==========
-        // Menu toggle
-        function toggleSection(sectionId) {
-            const content = document.getElementById(sectionId + '-content');
-            content.classList.toggle('collapsed');
-        }
+        // SIMPLE BRIGHTNESS CONTROL - NO MATERIAL CHANGES
+        const brightSlider = document.getElementById('brightSlider');
+        const brightValue = document.getElementById('brightValue');
         
-        // Navigation
-        document.getElementById('speedSlider').addEventListener('input', function() {
-            const val = parseFloat(this.value);
-            document.getElementById('speedValue').textContent = val.toFixed(1);
-            camera.speed = val;
-        });
-        
-        document.getElementById('mouseSlider').addEventListener('input', function() {
-            const val = parseInt(this.value);
-            document.getElementById('mouseValue').textContent = val;
-            camera.angularSensibility = val;
-        });
-        
-        function resetCamera() {
-            if (mapMeshes.length > 0) {
-                const center = mapMeshes[0].getBoundingInfo().boundingBox.center;
-                camera.position.set(center.x, center.y + 2, center.z - 10);
-                camera.setTarget(center);
-            }
-        }
-        
-        // Brightness (0.1 - 10.0)
-        document.getElementById('brightSlider').addEventListener('input', function() {
+        brightSlider.addEventListener('input', function() {
             const brightness = parseFloat(this.value);
-            document.getElementById('brightValue').textContent = brightness.toFixed(1);
+            brightValue.textContent = brightness.toFixed(1);
+            
+            // ONLY TWO SIMPLE METHODS:
+            // 1. Light intensity (direct light source)
             light.intensity = brightness;
+            
+            // 2. Scene exposure (like camera exposure)
             scene.imageProcessingConfiguration.exposure = brightness;
+            
+            // NO emissiveColor changes!
+            // NO material overrides!
         });
         
-        // Fog
-        document.getElementById('fogSlider').addEventListener('input', function() {
-            const density = parseFloat(this.value);
-            document.getElementById('fogValue').textContent = density.toFixed(3);
-            scene.fogDensity = density;
-        });
+        // Initialize exposure
+        scene.imageProcessingConfiguration.toneMappingEnabled = true;
+        scene.imageProcessingConfiguration.exposure = 1.0;
         
-        // Wireframe
-        document.getElementById('wireframeToggle').addEventListener('change', function() {
-            mapMeshes.forEach(mesh => {
-                if (mesh.material) {
-                    mesh.material.wireframe = this.checked;
-                }
-            });
-        });
-        
-        // Bounding Boxes
-        document.getElementById('bboxToggle').addEventListener('change', function() {
-            mapMeshes.forEach(mesh => {
-                mesh.showBoundingBox = this.checked;
-            });
-        });
-        
-        // Grid
-        document.getElementById('gridToggle').addEventListener('change', function() {
-            grid.isVisible = this.checked;
-        });
-        
-        // Day/Night
-        function setDay() {
-            light.diffuse = new BABYLON.Color3(1, 1, 0.95);
-            light.groundColor = new BABYLON.Color3(0.8, 0.9, 1);
-            scene.fogColor = new BABYLON.Color3(0.9, 0.9, 1);
-        }
-        
-        function setNight() {
-            light.diffuse = new BABYLON.Color3(0.1, 0.1, 0.3);
-            light.groundColor = new BABYLON.Color3(0, 0, 0.1);
-            scene.fogColor = new BABYLON.Color3(0, 0, 0.1);
-        }
-        
-        function setSunset() {
-            light.diffuse = new BABYLON.Color3(1, 0.6, 0.3);
-            light.groundColor = new BABYLON.Color3(0.3, 0.2, 0.1);
-            scene.fogColor = new BABYLON.Color3(0.8, 0.5, 0.3);
-        }
-        
-        // Map Scale
-        document.getElementById('scaleSlider').addEventListener('input', function() {
-            const scale = parseFloat(this.value);
-            document.getElementById('scaleValue').textContent = scale.toFixed(1);
-            mapMeshes.forEach(mesh => {
-                mesh.scaling = new BABYLON.Vector3(scale, scale, scale);
-            });
-        });
-        
-        // Map Rotation
-        document.getElementById('rotateSlider').addEventListener('input', function() {
-            const angle = parseInt(this.value);
-            document.getElementById('rotateValue').textContent = angle + '°';
-            mapMeshes.forEach(mesh => {
-                mesh.rotation.y = BABYLON.Tools.ToRadians(angle);
-            });
-        });
-        
-        // Debug
-        function logSceneInfo() {
-            console.log("=== SCENE INFO ===");
-            console.log("Meshes:", scene.meshes.length);
-            console.log("Lights:", scene.lights.length);
-            console.log("Materials:", scene.materials.length);
-            console.log("Camera Position:", camera.position);
-            console.log("Camera Target:", camera.target);
-        }
-        
-        function takeScreenshot() {
-            BABYLON.Tools.CreateScreenshot(engine, camera, { precision: 1 });
-        }
-        
-        document.getElementById('fpsToggle').addEventListener('change', function() {
-            scene.debugLayer.show({ embedMode: true });
-        });
-        
-        // ========== COORDINATES DISPLAY ==========
-        const coordsDisplay = document.getElementById('coordsDisplay');
-        scene.onBeforeRenderObservable.add(() => {
-            const pos = camera.position;
-            coordsDisplay.textContent = 
-                `X: ${pos.x.toFixed(2)} | Y: ${pos.y.toFixed(2)} | Z: ${pos.z.toFixed(2)}`;
-        });
-        
-        // ========== ENGINE ==========
+        // Focus
         canvas.addEventListener('click', () => canvas.focus());
         canvas.focus();
+        
+        // Render
         engine.runRenderLoop(() => scene.render());
         window.addEventListener('resize', () => engine.resize());
     </script>
