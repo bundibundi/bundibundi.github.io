@@ -16,82 +16,101 @@
             height: 100%;
             touch-action: none;
         }
+        #instructions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            font-family: Arial;
+            font-size: 14px;
+            border-radius: 5px;
+        }
     </style>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 </head>
 <body>
+    <div id="instructions">
+        Click to lock mouse | WASD to move | Q/E to go up/down | Mouse to look
+    </div>
     <canvas id="renderCanvas"></canvas>
     <script>
-        // 1. Initialize canvas and engine
         const canvas = document.getElementById('renderCanvas');
         const engine = new BABYLON.Engine(canvas, true);
         
-        // 2. Create a scene
         const createScene = function() {
             const scene = new BABYLON.Scene(engine);
             
-            // 3. Basic lighting
+            // Lighting
             const light = new BABYLON.HemisphericLight("light", 
                 new BABYLON.Vector3(0, 1, 0), scene);
-            light.intensity = 0.7;
+            light.intensity = 0.8;
             
-            // 4. FPS CAMERA (WASD + Mouse)
+            // FPS CAMERA - FIXED VERSION
             const camera = new BABYLON.UniversalCamera("UniversalCamera", 
-                new BABYLON.Vector3(0, 5, -10), scene);
+                new BABYLON.Vector3(0, 2, -5), scene);
             
-            // Camera settings
+            // CAMERA SETUP WITH ALL MOVEMENT ENABLED
             camera.attachControl(canvas, true);
-            camera.speed = 0.5;           // Movement speed
-            camera.angularSensibility = 2000; // Mouse sensitivity
+            camera.inputs.addMouse();  // CRITICAL: Enables mouse look
+            
+            // Movement settings
+            camera.speed = 0.3;           // Walking speed
+            camera.angularSensibility = 2500; // Mouse sensitivity
             camera.applyGravity = false;  // Free flight mode
-            camera.checkCollisions = false; // No collisions
+            camera.checkCollisions = false;
             
-            // Set initial target
-            camera.setTarget(BABYLON.Vector3.Zero());
+            // Keys for vertical movement
+            camera.keysUp.push(69);    // E key (move up)
+            camera.keysDown.push(81);  // Q key (move down)
             
-            // 5. Load your GLB map
+            // Standard WASD keys are already configured
+            camera.keysLeft.push(65);  // A
+            camera.keysRight.push(68); // D
+            camera.keysForward.push(87); // W
+            camera.keysBackward.push(83); // S
+            
+            camera.setTarget(new BABYLON.Vector3(0, 2, 0));
+            
+            // Load GLB map
             BABYLON.SceneLoader.ImportMesh("", "./", "map2.glb", scene, 
                 function(meshes) {
                     console.log("Map loaded!", meshes);
                     
-                    // Center camera on loaded map
                     if (meshes && meshes.length > 0) {
                         const boundingBox = meshes[0].getBoundingInfo().boundingBox;
                         const center = boundingBox.center;
                         
-                        // Position camera near the map
+                        // Position camera at human height
                         camera.position = new BABYLON.Vector3(
                             center.x, 
-                            center.y + 5, 
-                            center.z - 10
+                            center.y + 1.7,  // Human eye height
+                            center.z - 3
                         );
-                        camera.setTarget(center);
+                        camera.setTarget(new BABYLON.Vector3(
+                            center.x,
+                            center.y + 1.7,
+                            center.z
+                        ));
                     }
                 },
-                function(progress) {
-                    // Loading progress (optional)
-                    console.log(`Loading... ${(progress.loaded / progress.total * 100).toFixed(1)}%`);
-                },
+                null,
                 function(error) {
-                    // Error handling
-                    console.error("Error loading map:", error.message);
-                    alert("Error loading map. Please check console.");
+                    console.error("Error loading map:", error);
                 }
             );
             
             return scene;
         };
         
-        // 6. Create scene and start rendering
         const scene = createScene();
         
-        // 7. Start render loop
         engine.runRenderLoop(function() {
             scene.render();
         });
         
-        // 8. Handle window resize
         window.addEventListener('resize', function() {
             engine.resize();
         });
