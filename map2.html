@@ -1,147 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CesiumJS First-Person Controls</title>
-    <script src="https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Cesium.js"></script>
-    <link href="https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>Meine GLB Map mit Babylon.js</title>
     <style>
-        body, html { margin: 0; padding: 0; overflow: hidden; }
-        #cesiumContainer { width: 100%; height: 100%; }
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
     </style>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 </head>
 <body>
-    <div id="cesiumContainer"></div>
+    <canvas id="renderCanvas"></canvas>
     <script>
-        // Initialize Cesium Viewer
-        const viewer = new Cesium.Viewer('cesiumContainer', {
-            terrainProvider: Cesium.createWorldTerrain(), // Enable 3D terrain
-        });
-
-        // Load GLB file
-        const entity = viewer.entities.add({
-            position: Cesium.Cartesian3.fromDegrees(-75.170726, 39.920866, 100), // Position (Longitude, Latitude, Altitude)
-            model: {
-                uri: 'map2.glb',
-                // === NEUER HELLIGKEITS-FIX (aus Cesium-Forum) ===
-                imageBasedLighting: {
-                    imageBasedLightingFactor: new Cesium.Cartesian2(0.0, 0.0)  // Deaktiviert den dunklen Environment-Map-Effekt komplett → Modell wird viel heller!
+        // 1. Canvas und Engine initialisieren
+        const canvas = document.getElementById('renderCanvas');
+        const engine = new BABYLON.Engine(canvas, true);
+        
+        // 2. Eine Szene erstellen
+        const createScene = function() {
+            const scene = new BABYLON.Scene(engine);
+            
+            // 3. Himmelslicht für Grundbeleuchtung
+            const light = new BABYLON.HemisphericLight("light", 
+                new BABYLON.Vector3(0, 1, 0), scene);
+            light.intensity = 0.7;
+            
+            // 4. DAS IST DIE MAGISCHE KAMERA
+            // UniversalCamera = FPS-Kamera mit WASD + Maus
+            const camera = new BABYLON.UniversalCamera("UniversalCamera", 
+                new BABYLON.Vector3(0, 5, -10), scene);
+            
+            // Kameraeinstellungen (wie in einem Spiel)
+            camera.attachControl(canvas, true);
+            camera.speed = 0.5;           // Fluggeschwindigkeit
+            camera.angularSensibility = 2000; // Mausempfindlichkeit
+            camera.applyGravity = false;  // Schwerkraft aus (freies Fliegen)
+            camera.checkCollisions = false; // Kollisionen aus
+            
+            // Blickpunkt setzen
+            camera.setTarget(BABYLON.Vector3.Zero());
+            
+            // 5. Deine GLB-Map laden
+            BABYLON.SceneLoader.ImportMesh("", "./", "map2.glb", scene, 
+                function(meshes) {
+                    console.log("Map geladen!", meshes);
+                    
+                    // Optional: Kamera auf die Map zentrieren
+                    if (meshes && meshes.length > 0) {
+                        const boundingBox = meshes[0].getBoundingInfo().boundingBox;
+                        const center = boundingBox.center;
+                        
+                        // Kamera in die Nähe der Map setzen
+                        camera.position = new BABYLON.Vector3(
+                            center.x, 
+                            center.y + 5, 
+                            center.z - 10
+                        );
+                        camera.setTarget(center);
+                    }
+                },
+                function(progress) {
+                    // Fortschrittsanzeige (optional)
+                    console.log(`Lade... ${(progress.loaded / progress.total * 100).toFixed(1)}%`);
+                },
+                function(error) {
+                    // Fehlerbehandlung
+                    console.error("Fehler beim Laden der Map:", error.message);
+                    alert("Fehler beim Laden der Map. Bitte Konsole prüfen.");
                 }
-                // === ENDE FIX ===
-            },
-        });
-
-        // Adjust zoom limits
-        viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1; // Minimum zoom distance
-        viewer.scene.screenSpaceCameraController.maximumZoomDistance = 100000; // Maximum zoom distance
-
-        // Zoom to the entity
-        viewer.zoomTo(entity);
-
-        // Optional: Noch etwas Grundbeleuchtung (kann helfen, ist aber meist nicht mehr nötig)
-        viewer.scene.globe.enableLighting = true;
-        viewer.scene.skyAtmosphere.show = true;
-
-        // First-person camera controls
-        const camera = viewer.scene.camera;
-        const moveSpeed = 0.1; // Movement speed (slower)
-        const lookSpeed = 0.002; // Mouse movement speed (slower)
-        const rotateSpeed = 0.02; // Rotation speed for J, I, K, L
-
-        // Capture keyboard inputs
-        const keys = {
-            w: false,
-            a: false,
-            s: false,
-            d: false,
-            j: false, // Rotate left
-            i: false, // Rotate up
-            k: false, // Rotate down
-            l: false, // Rotate right
-            space: false, // Reset camera orientation
+            );
+            
+            return scene;
         };
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key in keys) {
-                keys[event.key] = true;
-            }
-            if (event.key === ' ') { // Spacebar
-                keys.space = true;
-            }
+        
+        // 6. Szene erstellen und Rendern starten
+        const scene = createScene();
+        
+        // 7. Render-Loop starten
+        engine.runRenderLoop(function() {
+            scene.render();
         });
-
-        document.addEventListener('keyup', (event) => {
-            if (event.key in keys) {
-                keys[event.key] = false;
-            }
-            if (event.key === ' ') { // Spacebar
-                keys.space = false;
-            }
-        });
-
-        // Capture mouse movement
-        const canvas = viewer.scene.canvas;
-        let isMouseLocked = false;
-
-        // Lock mouse pointer
-        canvas.addEventListener('click', () => {
-            canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
-            canvas.requestPointerLock();
-        });
-
-        // Process mouse movement
-        document.addEventListener('mousemove', (event) => {
-            if (document.pointerLockElement === canvas) {
-                const { movementX, movementY } = event;
-                camera.lookRight(movementX * lookSpeed); // Rotate horizontally
-                camera.lookUp(-movementY * lookSpeed); // Rotate vertically
-            }
-        });
-
-        // Update camera movement and rotation
-        viewer.clock.onTick.addEventListener(() => {
-            // Movement
-            if (keys.w) {
-                camera.moveForward(moveSpeed); // Move forward
-            }
-            if (keys.s) {
-                camera.moveBackward(moveSpeed); // Move backward
-            }
-            if (keys.a) {
-                camera.moveLeft(moveSpeed); // Move left
-            }
-            if (keys.d) {
-                camera.moveRight(moveSpeed); // Move right
-            }
-
-            // Rotation with J, I, K, L
-            if (keys.j) {
-                camera.lookLeft(rotateSpeed); // Rotate left
-            }
-            if (keys.i) {
-                camera.lookUp(rotateSpeed); // Rotate up
-            }
-            if (keys.k) {
-                camera.lookDown(rotateSpeed); // Rotate down
-            }
-            if (keys.l) {
-                camera.lookRight(rotateSpeed); // Rotate right
-            }
-
-            // Reset camera orientation with spacebar
-            if (keys.space) {
-                const heading = Cesium.Math.toRadians(0); // Reset heading (left/right rotation)
-                const pitch = Cesium.Math.toRadians(0); // Reset pitch (up/down rotation)
-                const roll = Cesium.Math.toRadians(0); // Reset roll (tilt)
-                camera.setView({
-                    orientation: {
-                        heading: heading,
-                        pitch: pitch,
-                        roll: roll,
-                    },
-                });
-            }
+        
+        // 8. Fenstergrößenänderung behandeln
+        window.addEventListener('resize', function() {
+            engine.resize();
         });
     </script>
 </body>
