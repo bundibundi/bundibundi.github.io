@@ -2,75 +2,102 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>GLB Map - WASD Flight</title>
+    <title>GLB Map Viewer</title>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <style>
         body, html { margin:0; padding:0; width:100%; height:100%; }
         #renderCanvas { width:100%; height:100%; display:block; }
-        #status { position:absolute; top:15px; left:15px; color:#0f0; background:rgba(0,0,0,0.7); padding:10px; font-family:monospace; font-size:14px; }
+        #status { position:absolute; top:15px; left:15px; color:white; background:rgba(0,0,0,0.5); padding:10px; font-family:Arial; }
+        #brightnessControl { 
+            position:absolute; 
+            top:60px; 
+            left:15px; 
+            color:white; 
+            background:rgba(0,0,0,0.5); 
+            padding:10px; 
+            font-family:Arial;
+            border-radius: 5px;
+        }
+        #brightSlider {
+            width: 150px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
-    <div id="status">Click screen → Use WASD + Mouse</div>
+    <div id="status">Click screen → WASD + Mouse</div>
+    <div id="brightnessControl">
+        Brightness: <input type="range" id="brightSlider" min="0.1" max="5.0" value="1.0" step="0.1"> 
+        <span id="brightValue">1.0</span>
+    </div>
     <canvas id="renderCanvas" tabindex="0"></canvas>
     
     <script>
-        // ========== SETUP ==========
         const canvas = document.getElementById('renderCanvas');
         const engine = new BABYLON.Engine(canvas, true);
         const scene = new BABYLON.Scene(engine);
         
-        // ========== LIGHT ==========
-        new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+        // Basic light
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+        light.intensity = 1.0;
         
-        // ========== CAMERA ==========
-        const camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 5, -15), scene);
-        camera.attachControl(canvas, true); // Attach controls
+        // Camera
+        const camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 5, -10), scene);
+        camera.attachControl(canvas, true);
+        camera.speed = 0.5;
+        camera.angularSensibility = 3000;
         
-        // Speed & Mouse settings
-        camera.speed = 3;
-        camera.angularSensibility = 1500;
-        camera.applyGravity = false;
-        camera.checkCollisions = false;
+        // Keys
+        camera.keysUp = [87];
+        camera.keysLeft = [65];
+        camera.keysDown = [83];
+        camera.keysRight = [68];
+        camera.keysUpward = [69];
+        camera.keysDownward = [81];
         
-        // ========== KEYBOARD CONTROLS ==========
-        camera.keysUp    = [87]; // W
-        camera.keysLeft  = [65]; // A  
-        camera.keysDown  = [83]; // S
-        camera.keysRight = [68]; // D
-        camera.keysUpward   = [69]; // E (up)
-        camera.keysDownward = [81]; // Q (down)
-        
-        // ========== LOAD YOUR MODEL ==========
+        // Load model
         BABYLON.SceneLoader.ImportMesh("", "./", "map1.glb", scene, (meshes) => {
-            console.log("Loaded:", meshes.length, "meshes");
-            document.getElementById('status').textContent = "READY: Click screen → WASD + Mouse";
+            console.log("Map loaded");
+            document.getElementById('status').textContent = "Ready - Click then WASD";
             
             if(meshes.length > 0) {
-                const box = meshes[0].getBoundingInfo().boundingBox;
-                const center = box.center;
-                // Position camera
-                camera.position.set(center.x, center.y + 3, center.z - 15);
+                const center = meshes[0].getBoundingInfo().boundingBox.center;
+                camera.position.set(center.x, center.y + 2, center.z - 10);
                 camera.setTarget(center);
             }
         });
         
-        // ========== FOCUS FIX ==========
-        canvas.addEventListener('click', () => {
-            canvas.focus();
-            console.log("Canvas focused - controls active");
-        });
-        canvas.focus(); // Auto-focus on load
+        // SIMPLE BRIGHTNESS CONTROL - NO MATERIAL CHANGES
+        const brightSlider = document.getElementById('brightSlider');
+        const brightValue = document.getElementById('brightValue');
         
-        // ========== RENDER LOOP ==========
+        brightSlider.addEventListener('input', function() {
+            const brightness = parseFloat(this.value);
+            brightValue.textContent = brightness.toFixed(1);
+            
+            // ONLY TWO SIMPLE METHODS:
+            // 1. Light intensity (direct light source)
+            light.intensity = brightness;
+            
+            // 2. Scene exposure (like camera exposure)
+            scene.imageProcessingConfiguration.exposure = brightness;
+            
+            // NO emissiveColor changes!
+            // NO material overrides!
+        });
+        
+        // Initialize exposure
+        scene.imageProcessingConfiguration.toneMappingEnabled = true;
+        scene.imageProcessingConfiguration.exposure = 1.0;
+        
+        // Focus
+        canvas.addEventListener('click', () => canvas.focus());
+        canvas.focus();
+        
+        // Render
         engine.runRenderLoop(() => scene.render());
         window.addEventListener('resize', () => engine.resize());
-        
-        // ========== DEBUG ==========
-        document.addEventListener('keydown', (e) => {
-            console.log(`Key: ${e.key} (Code: ${e.keyCode})`);
-        });
     </script>
 </body>
 </html>
