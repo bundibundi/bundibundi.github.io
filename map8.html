@@ -19,38 +19,10 @@
             font-family:Arial;
             border-radius: 5px;
         }
-        #positionDisplay {
-            position:absolute;
-            bottom:10px;
-            left:10px;
-            color:#0f0;
-            background:rgba(0,0,0,0.7);
-            padding:10px;
-            font-family:monospace;
-            font-size:12px;
-            border-radius:5px;
+        #brightSlider {
+            width: 150px;
+            vertical-align: middle;
         }
-        #spawnControls {
-            position:absolute;
-            top:120px;
-            left:15px;
-            color:white;
-            background:rgba(0,0,0,0.5);
-            padding:10px;
-            font-family:Arial;
-            border-radius:5px;
-        }
-        button {
-            margin:5px;
-            padding:5px 10px;
-            background:#4a6fa5;
-            color:white;
-            border:none;
-            border-radius:4px;
-            cursor:pointer;
-        }
-        button:hover { background:#5a7fb5; }
-        #brightSlider { width:150px; vertical-align:middle; }
     </style>
 </head>
 <body>
@@ -59,14 +31,6 @@
         Brightness: <input type="range" id="brightSlider" min="0.1" max="5.0" value="1.0" step="0.1"> 
         <span id="brightValue">1.0</span>
     </div>
-    <div id="spawnControls">
-        <div><strong>Spawnpoints:</strong></div>
-        <button onclick="teleportTo(0, 5, -10)">Default Spawn</button>
-        <button onclick="teleportTo(50, 10, 30)">Location 1</button>
-        <button onclick="teleportTo(-20, 15, 40)">Location 2</button>
-        <button onclick="copyPosition()">📋 COPY Current Position</button>
-    </div>
-    <div id="positionDisplay">Position: X=0.00 Y=0.00 Z=0.00</div>
     <canvas id="renderCanvas" tabindex="0"></canvas>
     
     <script>
@@ -92,44 +56,25 @@
         camera.keysUpward = [69];
         camera.keysDownward = [81];
         
-        // ========== TELEPORT FUNCTION ==========
-        function teleportTo(x, y, z) {
-            camera.position.set(x, y, z);
-            // Blick nach vorne
-            camera.setTarget(new BABYLON.Vector3(x, y, z + 1));
-            console.log(`Teleported to: X=${x}, Y=${y}, Z=${z}`);
-        }
-        
-        // ========== COPY POSITION FUNCTION ==========
-        function copyPosition() {
-            const pos = camera.position;
-            const text = `camera.position.set(${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)});`;
-            
-            // Copy to clipboard
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Copied to clipboard!\nPaste into your code:\n" + text);
-            }).catch(err => {
-                prompt("Copy this code:", text);
-            });
-        }
-        
         // Load model
         BABYLON.SceneLoader.ImportMesh("", "./", "map8.glb", scene, (meshes) => {
             console.log("Map loaded");
             document.getElementById('status').textContent = "Ready - Click then WASD";
             
             if(meshes.length > 0) {
-                // Optional: Auto-teleport to a specific spawn
-                // teleportTo(50, 10, 30); // Uncomment for auto-spawn
+                // ========== DEIN SPAWNPOINT ==========
+                const spawnX = -27.53;     // Deine X-Koordinate
+                const spawnY = 11.18;   // Deine Y-Koordinate (Höhe)
+                const spawnZ = 102.74;   // Deine Z-Koordinate
+                
+                // Kamera positionieren
+                camera.position.set(spawnX, spawnY, spawnZ);
+                
+                // Blick nach vorne (leicht nach unten für bessere Sicht)
+                camera.setTarget(new BABYLON.Vector3(spawnX, spawnY - 5, spawnZ + 10));
+                
+                console.log("Spawned at your position:", spawnX, spawnY, spawnZ);
             }
-        });
-        
-        // ========== LIVE POSITION DISPLAY ==========
-        const posDisplay = document.getElementById('positionDisplay');
-        scene.onBeforeRenderObservable.add(() => {
-            const pos = camera.position;
-            posDisplay.textContent = 
-                `Position: X=${pos.x.toFixed(2)} Y=${pos.y.toFixed(2)} Z=${pos.z.toFixed(2)}`;
         });
         
         // Brightness control
