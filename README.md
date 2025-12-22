@@ -1,14 +1,38 @@
 # Infinity Blade Viewer 
 ## What's IBV?
 Visit <a href="https://bundibundi.github.io" target="_blank" rel="noopener noreferrer">Infinity Blade Viewer</a>
-You can explore the Infinity Blade Map Throne Room. Huell has ported it to blender. I exported his blender map to a single .glb file.
-I made this with the help of DeepSeek (I can't code). It's using CesiumJS. It's not perfect but it's a start. 
-I don't think it's made for viewing Infinity Blade maps rather for totally different stuff.
+You can explore a few Infinity Blade Maps.
+It's made with the help of Deepseek (LLM) and Babylon.js (before I was using CesiumJS). 
+
+-----------
+Thanks huell for the maps:
+https://drive.google.com/drive/folders/1xKZSLpxey-1om5H7KASuwctDZLlpxapP
+
+Thanks cf2lter for the Generator map:
+https://mega.nz/file/Sh1wDKoB#ruWEN2Ka6DCGrjRanpBxby4bUSYR3KlTFsxs_BfBBJ0
+
+Other maps are from the Infinityblade Unreal Engine Plugins (Infinity Blade Content Packs). You can't install them through the offical plugin store anymore, you need to manually download and install them.
+https://drive.google.com/drive/folders/1Q_eOOcKrmTRPbkkOyZwKmwLYbqSLi7jp
+Installation guide:
+https://www.youtube.com/watch?v=4oDLOZoDNgU
+
+I've exported the blender maps to .glb files. If they were too big for github I've shrunk the size / compressed them here: https://convert3d.org/compress
+
+To check / view the .glb files I've used: https://gltf-viewer.donmccurdy.com/
+
+I've exported the UE maps just like shown in this video:
+https://youtu.be/hM316t9uL4Q?t=190
+----------
+--------
+---------
+--------
+--------
+Everything below here is outdated / kinda outdated:
+---------
 
 Quick video to show what it looks like atm: https://youtu.be/Zx1QIr5HCzk
 
-Thanks huell for the maps:
-https://drive.google.com/drive/folders/1xKZSLpxey-1om5H7KASuwctDZLlpxapP
+
 
 Thanks Deepseek for the coding and reading my bad prompts.
 
