@@ -25,7 +25,7 @@
         
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
@@ -120,34 +120,44 @@
         }
         
         /* Color variations for different buttons */
-        .map-button:nth-child(3n+1) {
+        .map-button:nth-child(4n+1) {
             background: linear-gradient(to right, #9b59b6, #8e44ad);
             box-shadow: 0 7px 15px rgba(155, 89, 182, 0.3);
         }
         
-        .map-button:nth-child(3n+1):hover {
+        .map-button:nth-child(4n+1):hover {
             background: linear-gradient(to right, #8e44ad, #7d3c98);
             box-shadow: 0 12px 20px rgba(155, 89, 182, 0.4);
         }
         
-        .map-button:nth-child(3n+2) {
+        .map-button:nth-child(4n+2) {
             background: linear-gradient(to right, #e74c3c, #c0392b);
             box-shadow: 0 7px 15px rgba(231, 76, 60, 0.3);
         }
         
-        .map-button:nth-child(3n+2):hover {
+        .map-button:nth-child(4n+2):hover {
             background: linear-gradient(to right, #c0392b, #a93226);
             box-shadow: 0 12px 20px rgba(231, 76, 60, 0.4);
         }
         
-        .map-button:nth-child(3n+3) {
+        .map-button:nth-child(4n+3) {
             background: linear-gradient(to right, #2ecc71, #27ae60);
             box-shadow: 0 7px 15px rgba(46, 204, 113, 0.3);
         }
         
-        .map-button:nth-child(3n+3):hover {
+        .map-button:nth-child(4n+3):hover {
             background: linear-gradient(to right, #27ae60, #219653);
             box-shadow: 0 12px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .map-button:nth-child(4n+4) {
+            background: linear-gradient(to right, #f39c12, #e67e22);
+            box-shadow: 0 7px 15px rgba(243, 156, 18, 0.3);
+        }
+        
+        .map-button:nth-child(4n+4):hover {
+            background: linear-gradient(to right, #e67e22, #d35400);
+            box-shadow: 0 12px 20px rgba(243, 156, 18, 0.4);
         }
         
         footer {
@@ -166,9 +176,15 @@
         }
         
         /* Responsive adjustments */
-        @media (max-width: 1100px) {
+        @media (max-width: 1200px) {
             .maps-grid {
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .maps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
         }
         
@@ -239,17 +255,27 @@
             animation: fadeIn 0.5s ease forwards;
         }
         
-        /* Delay for each element */
-        .map-button:nth-child(1) { animation-delay: 0.1s; }
-        .map-button:nth-child(2) { animation-delay: 0.2s; }
-        .map-button:nth-child(3) { animation-delay: 0.3s; }
-        .map-button:nth-child(4) { animation-delay: 0.4s; }
-        .map-button:nth-child(5) { animation-delay: 0.5s; }
-        .map-button:nth-child(6) { animation-delay: 0.6s; }
-        .map-button:nth-child(7) { animation-delay: 0.7s; }
-        .map-button:nth-child(8) { animation-delay: 0.8s; }
-        .map-button:nth-child(9) { animation-delay: 0.9s; }
-        .map-button:nth-child(10) { animation-delay: 1.0s; }
+        /* Delay for each element - jetzt für 20 Elemente */
+        .map-button:nth-child(1) { animation-delay: 0.05s; }
+        .map-button:nth-child(2) { animation-delay: 0.1s; }
+        .map-button:nth-child(3) { animation-delay: 0.15s; }
+        .map-button:nth-child(4) { animation-delay: 0.2s; }
+        .map-button:nth-child(5) { animation-delay: 0.25s; }
+        .map-button:nth-child(6) { animation-delay: 0.3s; }
+        .map-button:nth-child(7) { animation-delay: 0.35s; }
+        .map-button:nth-child(8) { animation-delay: 0.4s; }
+        .map-button:nth-child(9) { animation-delay: 0.45s; }
+        .map-button:nth-child(10) { animation-delay: 0.5s; }
+        .map-button:nth-child(11) { animation-delay: 0.55s; }
+        .map-button:nth-child(12) { animation-delay: 0.6s; }
+        .map-button:nth-child(13) { animation-delay: 0.65s; }
+        .map-button:nth-child(14) { animation-delay: 0.7s; }
+        .map-button:nth-child(15) { animation-delay: 0.75s; }
+        .map-button:nth-child(16) { animation-delay: 0.8s; }
+        .map-button:nth-child(17) { animation-delay: 0.85s; }
+        .map-button:nth-child(18) { animation-delay: 0.9s; }
+        .map-button:nth-child(19) { animation-delay: 0.95s; }
+        .map-button:nth-child(20) { animation-delay: 1.0s; }
     </style>
 </head>
 <body>
@@ -291,12 +317,42 @@
                 <a href="map10.html" class="map-button">
                     <i class="fas fa-map"></i> Archive
                 </a>
+                <a href="map11.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 11
+                </a>
+                <a href="map12.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 12
+                </a>
+                <a href="map13.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 13
+                </a>
+                <a href="map14.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 14
+                </a>
+                <a href="map15.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 15
+                </a>
+                <a href="map16.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 16
+                </a>
+                <a href="map17.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 17
+                </a>
+                <a href="map18.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 18
+                </a>
+                <a href="map19.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 19
+                </a>
+                <a href="map20.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 20
+                </a>
             </div>
         </main>
         
         <footer>
-            <p>Map Selection Interface </p>
-            <p class="instruction">Click on a map to open it. </p>
+            <p>Map Selection Interface</p>
+            <p class="instruction">Click on a map to open it. 20 maps available.</p>
         </footer>
     </div>
 
@@ -330,7 +386,7 @@
             });
             
             // Simulate loading animation
-            console.log("Map selection loaded. Buttons are ready!");
+            console.log("Map selection loaded. 20 buttons are ready!");
         });
     </script>
 </body>
