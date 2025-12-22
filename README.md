@@ -22,6 +22,7 @@ To check / view the .glb files I've used: https://gltf-viewer.donmccurdy.com/
 
 I've exported the UE maps just like shown in this video:
 https://youtu.be/hM316t9uL4Q?t=190
+
 ----------
 --------
 ---------
