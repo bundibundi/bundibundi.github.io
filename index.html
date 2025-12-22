@@ -66,14 +66,13 @@
         
         .maps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 25px;
         }
         
         .map-button {
             display: block;
             text-decoration: none;
-            background: linear-gradient(to right, #3498db, #2980b9);
             color: white;
             padding: 25px 20px;
             border-radius: 15px;
@@ -81,7 +80,6 @@
             font-size: 1.8rem;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 7px 15px rgba(52, 152, 219, 0.3);
             border: none;
             cursor: pointer;
             position: relative;
@@ -90,8 +88,6 @@
         
         .map-button:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(52, 152, 219, 0.4);
-            background: linear-gradient(to right, #2980b9, #1f639b);
         }
         
         .map-button:active {
@@ -119,45 +115,38 @@
             left: 100%;
         }
         
-        /* Color variations for different buttons */
-        .map-button:nth-child(4n+1) {
+        /* Farben für Spalten: links violett, mitte rot, rechts grün */
+        /* Linke Spalte (1, 4, 7, 10, 13, 16, 19) - Violett */
+        .map-button:nth-child(3n+1) {
             background: linear-gradient(to right, #9b59b6, #8e44ad);
             box-shadow: 0 7px 15px rgba(155, 89, 182, 0.3);
         }
         
-        .map-button:nth-child(4n+1):hover {
+        .map-button:nth-child(3n+1):hover {
             background: linear-gradient(to right, #8e44ad, #7d3c98);
             box-shadow: 0 12px 20px rgba(155, 89, 182, 0.4);
         }
         
-        .map-button:nth-child(4n+2) {
+        /* Mittlere Spalte (2, 5, 8, 11, 14, 17, 20) - Rot */
+        .map-button:nth-child(3n+2) {
             background: linear-gradient(to right, #e74c3c, #c0392b);
             box-shadow: 0 7px 15px rgba(231, 76, 60, 0.3);
         }
         
-        .map-button:nth-child(4n+2):hover {
+        .map-button:nth-child(3n+2):hover {
             background: linear-gradient(to right, #c0392b, #a93226);
             box-shadow: 0 12px 20px rgba(231, 76, 60, 0.4);
         }
         
-        .map-button:nth-child(4n+3) {
+        /* Rechte Spalte (3, 6, 9, 12, 15, 18) - Grün */
+        .map-button:nth-child(3n+3) {
             background: linear-gradient(to right, #2ecc71, #27ae60);
             box-shadow: 0 7px 15px rgba(46, 204, 113, 0.3);
         }
         
-        .map-button:nth-child(4n+3):hover {
+        .map-button:nth-child(3n+3):hover {
             background: linear-gradient(to right, #27ae60, #219653);
             box-shadow: 0 12px 20px rgba(46, 204, 113, 0.4);
-        }
-        
-        .map-button:nth-child(4n+4) {
-            background: linear-gradient(to right, #f39c12, #e67e22);
-            box-shadow: 0 7px 15px rgba(243, 156, 18, 0.3);
-        }
-        
-        .map-button:nth-child(4n+4):hover {
-            background: linear-gradient(to right, #e67e22, #d35400);
-            box-shadow: 0 12px 20px rgba(243, 156, 18, 0.4);
         }
         
         footer {
@@ -178,13 +167,28 @@
         /* Responsive adjustments */
         @media (max-width: 1200px) {
             .maps-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                grid-template-columns: repeat(2, 1fr);
             }
-        }
-        
-        @media (max-width: 992px) {
-            .maps-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            
+            /* Anpassung für 2 Spalten */
+            .map-button:nth-child(odd) {
+                background: linear-gradient(to right, #9b59b6, #8e44ad);
+                box-shadow: 0 7px 15px rgba(155, 89, 182, 0.3);
+            }
+            
+            .map-button:nth-child(odd):hover {
+                background: linear-gradient(to right, #8e44ad, #7d3c98);
+                box-shadow: 0 12px 20px rgba(155, 89, 182, 0.4);
+            }
+            
+            .map-button:nth-child(even) {
+                background: linear-gradient(to right, #e74c3c, #c0392b);
+                box-shadow: 0 7px 15px rgba(231, 76, 60, 0.3);
+            }
+            
+            .map-button:nth-child(even):hover {
+                background: linear-gradient(to right, #c0392b, #a93226);
+                box-shadow: 0 12px 20px rgba(231, 76, 60, 0.4);
             }
         }
         
@@ -202,7 +206,7 @@
             }
             
             .maps-grid {
-                grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+                grid-template-columns: 1fr;
                 gap: 20px;
             }
             
@@ -214,6 +218,17 @@
             .map-button i {
                 font-size: 1.8rem;
                 margin-right: 12px;
+            }
+            
+            /* Anpassung für 1 Spalte - alle gleich */
+            .map-button {
+                background: linear-gradient(to right, #3498db, #2980b9);
+                box-shadow: 0 7px 15px rgba(52, 152, 219, 0.3);
+            }
+            
+            .map-button:hover {
+                background: linear-gradient(to right, #2980b9, #1f639b);
+                box-shadow: 0 12px 20px rgba(52, 152, 219, 0.4);
             }
         }
         
@@ -287,63 +302,89 @@
         
         <main class="maps-container">
             <div class="maps-grid">
+                <!-- Linke Spalte - Violett -->
                 <a href="map1.html" class="map-button">
                     <i class="fas fa-map"></i> Throne Room
                 </a>
+                <!-- Mittlere Spalte - Rot -->
                 <a href="map2.html" class="map-button">
                     <i class="fas fa-map"></i> Outer Walls
                 </a>
+                <!-- Rechte Spalte - Grün -->
                 <a href="map3.html" class="map-button">
                     <i class="fas fa-map"></i> Asia Forest
                 </a>
+                
+                <!-- Linke Spalte - Violett -->
                 <a href="map4.html" class="map-button">
                     <i class="fas fa-map"></i> Asia Pagoda
                 </a>
+                <!-- Mittlere Spalte - Rot -->
                 <a href="map5.html" class="map-button">
                     <i class="fas fa-map"></i> Forest
                 </a>
+                <!-- Rechte Spalte - Grün -->
                 <a href="map6.html" class="map-button">
                     <i class="fas fa-map"></i> Front Gate
                 </a>
+                
+                <!-- Linke Spalte - Violett -->
                 <a href="map7.html" class="map-button">
                     <i class="fas fa-map"></i> Courtyard
                 </a>
+                <!-- Mittlere Spalte - Rot -->
                 <a href="map8.html" class="map-button">
                     <i class="fas fa-map"></i> Pit
                 </a>
+                <!-- Rechte Spalte - Grün -->
                 <a href="map9.html" class="map-button">
                     <i class="fas fa-map"></i> Generator
                 </a>
+                
+                <!-- Linke Spalte - Violett -->
                 <a href="map10.html" class="map-button">
                     <i class="fas fa-map"></i> Archive
                 </a>
+                <!-- Mittlere Spalte - Rot -->
                 <a href="map11.html" class="map-button">
                     <i class="fas fa-map"></i> Map 11
                 </a>
+                <!-- Rechte Spalte - Grün -->
                 <a href="map12.html" class="map-button">
                     <i class="fas fa-map"></i> Map 12
                 </a>
+                
+                <!-- Linke Spalte - Violett -->
                 <a href="map13.html" class="map-button">
                     <i class="fas fa-map"></i> Map 13
                 </a>
+                <!-- Mittlere Spalte - Rot -->
                 <a href="map14.html" class="map-button">
                     <i class="fas fa-map"></i> Map 14
                 </a>
+                <!-- Rechte Spalte - Grün -->
                 <a href="map15.html" class="map-button">
                     <i class="fas fa-map"></i> Map 15
                 </a>
+                
+                <!-- Linke Spalte - Violett -->
                 <a href="map16.html" class="map-button">
                     <i class="fas fa-map"></i> Map 16
                 </a>
+                <!-- Mittlere Spalte - Rot -->
                 <a href="map17.html" class="map-button">
                     <i class="fas fa-map"></i> Map 17
                 </a>
+                <!-- Rechte Spalte - Grün -->
                 <a href="map18.html" class="map-button">
                     <i class="fas fa-map"></i> Map 18
                 </a>
+                
+                <!-- Linke Spalte - Violett -->
                 <a href="map19.html" class="map-button">
                     <i class="fas fa-map"></i> Map 19
                 </a>
+                <!-- Mittlere Spalte - Rot -->
                 <a href="map20.html" class="map-button">
                     <i class="fas fa-map"></i> Map 20
                 </a>
