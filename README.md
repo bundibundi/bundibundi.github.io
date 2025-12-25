@@ -18,6 +18,9 @@ https://www.youtube.com/watch?v=4oDLOZoDNgU
 
 I've exported the blender maps to .glb files. If they were too big for github I've shrunk the size / compressed them here: https://convert3d.org/compress
 
+I had to export some of the Unreal Engine Maps a bit different, in order that Babylon is able to load them in the browser:
+https://imgur.com/a/4FpccOu
+
 To check / view the .glb files I've used: https://gltf-viewer.donmccurdy.com/
 
 I've exported the UE maps just like shown in this video:
