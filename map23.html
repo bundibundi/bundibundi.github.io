@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GLB Map Viewer</title>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <style>
+        body, html { margin:0; padding:0; width:100%; height:100%; }
+        #renderCanvas { width:100%; height:100%; display:block; }
+        #status { position:absolute; top:15px; left:15px; color:white; background:rgba(0,0,0,0.5); padding:10px; font-family:Arial; }
+        #brightnessControl { 
+            position:absolute; 
+            top:60px; 
+            left:15px; 
+            color:white; 
+            background:rgba(0,0,0,0.5); 
+            padding:10px; 
+            font-family:Arial;
+            border-radius: 5px;
+        }
+        #positionDisplay {
+            position:absolute;
+            bottom:10px;
+            left:10px;
+            color:#0f0;
+            background:rgba(0,0,0,0.7);
+            padding:10px;
+            font-family:monospace;
+            font-size:12px;
+            border-radius:5px;
+        }
+        #spawnControls {
+            position:absolute;
+            top:120px;
+            left:15px;
+            color:white;
+            background:rgba(0,0,0,0.5);
+            padding:10px;
+            font-family:Arial;
+            border-radius:5px;
+        }
+        button {
+            margin:5px;
+            padding:5px 10px;
+            background:#4a6fa5;
+            color:white;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+        }
+        button:hover { background:#5a7fb5; }
+        #brightSlider { width:150px; vertical-align:middle; }
+    </style>
+</head>
+<body>
+    <div id="status">Click screen → WASD + Mouse</div>
+    <div id="brightnessControl">
+        Brightness: <input type="range" id="brightSlider" min="0.1" max="5.0" value="1.0" step="0.1"> 
+        <span id="brightValue">1.0</span>
+    </div>
+    <div id="spawnControls">
+        <div><strong>Spawnpoints:</strong></div>
+        <button onclick="teleportTo(0, 5, -10)">Default Spawn</button>
+        <button onclick="teleportTo(50, 10, 30)">Location 1</button>
+        <button onclick="teleportTo(-20, 15, 40)">Location 2</button>
+        <button onclick="copyPosition()">📋 COPY Current Position</button>
+    </div>
+    <div id="positionDisplay">Position: X=0.00 Y=0.00 Z=0.00</div>
+    <canvas id="renderCanvas" tabindex="0"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('renderCanvas');
+        const engine = new BABYLON.Engine(canvas, true);
+        const scene = new BABYLON.Scene(engine);
+        
+        // Basic light
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+        light.intensity = 1.0;
+        
+        // Camera
+        const camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 5, -10), scene);
+        camera.attachControl(canvas, true);
+        camera.speed = 0.5;
+        camera.angularSensibility = 3000;
+        
+        // Keys
+        camera.keysUp = [87];
+        camera.keysLeft = [65];
+        camera.keysDown = [83];
+        camera.keysRight = [68];
+        camera.keysUpward = [69];
+        camera.keysDownward = [81];
+        
+        // ========== TELEPORT FUNCTION ==========
+        function teleportTo(x, y, z) {
+            camera.position.set(x, y, z);
+            // Blick nach vorne
+            camera.setTarget(new BABYLON.Vector3(x, y, z + 1));
+            console.log(`Teleported to: X=${x}, Y=${y}, Z=${z}`);
+        }
+        
+        // ========== COPY POSITION FUNCTION ==========
+        function copyPosition() {
+            const pos = camera.position;
+            const text = `camera.position.set(${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)});`;
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Copied to clipboard!\nPaste into your code:\n" + text);
+            }).catch(err => {
+                prompt("Copy this code:", text);
+            });
+        }
+        
+        // Load model
+        BABYLON.SceneLoader.ImportMesh("", "./", "map23.glb", scene, (meshes) => {
+            console.log("Map loaded");
+            document.getElementById('status').textContent = "Ready - Click then WASD";
+            
+            if(meshes.length > 0) {
+                // Optional: Auto-teleport to a specific spawn
+                // teleportTo(50, 10, 30); // Uncomment for auto-spawn
+            }
+        });
+        
+        // ========== LIVE POSITION DISPLAY ==========
+        const posDisplay = document.getElementById('positionDisplay');
+        scene.onBeforeRenderObservable.add(() => {
+            const pos = camera.position;
+            posDisplay.textContent = 
+                `Position: X=${pos.x.toFixed(2)} Y=${pos.y.toFixed(2)} Z=${pos.z.toFixed(2)}`;
+        });
+        
+        // Brightness control
+        const brightSlider = document.getElementById('brightSlider');
+        const brightValue = document.getElementById('brightValue');
+        
+        brightSlider.addEventListener('input', function() {
+            const brightness = parseFloat(this.value);
+            brightValue.textContent = brightness.toFixed(1);
+            light.intensity = brightness;
+            scene.imageProcessingConfiguration.exposure = brightness;
+        });
+        
+        // Initialize exposure
+        scene.imageProcessingConfiguration.toneMappingEnabled = true;
+        scene.imageProcessingConfiguration.exposure = 1.0;
+        
+        // Focus
+        canvas.addEventListener('click', () => canvas.focus());
+        canvas.focus();
+        
+        // Render
+        engine.runRenderLoop(() => scene.render());
+        window.addEventListener('resize', () => engine.resize());
+    </script>
+</body>
+</html>
