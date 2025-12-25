@@ -25,7 +25,7 @@
         
         .container {
             width: 100%;
-            max-width: 1400px;
+            max-width: 1500px;
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
@@ -116,7 +116,7 @@
         }
         
         /* Farben für Spalten: links violett, mitte rot, rechts grün */
-        /* Linke Spalte (1, 4, 7, 10, 13, 16, 19) - Violett */
+        /* Linke Spalte (1, 4, 7, 10, 13, 16, 19, 22, 25, 28) - Violett */
         .map-button:nth-child(3n+1) {
             background: linear-gradient(to right, #9b59b6, #8e44ad);
             box-shadow: 0 7px 15px rgba(155, 89, 182, 0.3);
@@ -127,7 +127,7 @@
             box-shadow: 0 12px 20px rgba(155, 89, 182, 0.4);
         }
         
-        /* Mittlere Spalte (2, 5, 8, 11, 14, 17, 20) - Rot */
+        /* Mittlere Spalte (2, 5, 8, 11, 14, 17, 20, 23, 26, 29) - Rot */
         .map-button:nth-child(3n+2) {
             background: linear-gradient(to right, #e74c3c, #c0392b);
             box-shadow: 0 7px 15px rgba(231, 76, 60, 0.3);
@@ -138,7 +138,7 @@
             box-shadow: 0 12px 20px rgba(231, 76, 60, 0.4);
         }
         
-        /* Rechte Spalte (3, 6, 9, 12, 15, 18) - Grün */
+        /* Rechte Spalte (3, 6, 9, 12, 15, 18, 21, 24, 27, 30) - Grün */
         .map-button:nth-child(3n+3) {
             background: linear-gradient(to right, #2ecc71, #27ae60);
             box-shadow: 0 7px 15px rgba(46, 204, 113, 0.3);
@@ -270,27 +270,37 @@
             animation: fadeIn 0.5s ease forwards;
         }
         
-        /* Delay for each element - jetzt für 20 Elemente */
-        .map-button:nth-child(1) { animation-delay: 0.05s; }
-        .map-button:nth-child(2) { animation-delay: 0.1s; }
-        .map-button:nth-child(3) { animation-delay: 0.15s; }
-        .map-button:nth-child(4) { animation-delay: 0.2s; }
-        .map-button:nth-child(5) { animation-delay: 0.25s; }
-        .map-button:nth-child(6) { animation-delay: 0.3s; }
-        .map-button:nth-child(7) { animation-delay: 0.35s; }
-        .map-button:nth-child(8) { animation-delay: 0.4s; }
-        .map-button:nth-child(9) { animation-delay: 0.45s; }
-        .map-button:nth-child(10) { animation-delay: 0.5s; }
-        .map-button:nth-child(11) { animation-delay: 0.55s; }
-        .map-button:nth-child(12) { animation-delay: 0.6s; }
-        .map-button:nth-child(13) { animation-delay: 0.65s; }
-        .map-button:nth-child(14) { animation-delay: 0.7s; }
-        .map-button:nth-child(15) { animation-delay: 0.75s; }
-        .map-button:nth-child(16) { animation-delay: 0.8s; }
-        .map-button:nth-child(17) { animation-delay: 0.85s; }
-        .map-button:nth-child(18) { animation-delay: 0.9s; }
-        .map-button:nth-child(19) { animation-delay: 0.95s; }
-        .map-button:nth-child(20) { animation-delay: 1.0s; }
+        /* Delay for each element - jetzt für 30 Elemente */
+        .map-button:nth-child(1) { animation-delay: 0.03s; }
+        .map-button:nth-child(2) { animation-delay: 0.06s; }
+        .map-button:nth-child(3) { animation-delay: 0.09s; }
+        .map-button:nth-child(4) { animation-delay: 0.12s; }
+        .map-button:nth-child(5) { animation-delay: 0.15s; }
+        .map-button:nth-child(6) { animation-delay: 0.18s; }
+        .map-button:nth-child(7) { animation-delay: 0.21s; }
+        .map-button:nth-child(8) { animation-delay: 0.24s; }
+        .map-button:nth-child(9) { animation-delay: 0.27s; }
+        .map-button:nth-child(10) { animation-delay: 0.3s; }
+        .map-button:nth-child(11) { animation-delay: 0.33s; }
+        .map-button:nth-child(12) { animation-delay: 0.36s; }
+        .map-button:nth-child(13) { animation-delay: 0.39s; }
+        .map-button:nth-child(14) { animation-delay: 0.42s; }
+        .map-button:nth-child(15) { animation-delay: 0.45s; }
+        .map-button:nth-child(16) { animation-delay: 0.48s; }
+        .map-button:nth-child(17) { animation-delay: 0.51s; }
+        .map-button:nth-child(18) { animation-delay: 0.54s; }
+        .map-button:nth-child(19) { animation-delay: 0.57s; }
+        .map-button:nth-child(20) { animation-delay: 0.6s; }
+        .map-button:nth-child(21) { animation-delay: 0.63s; }
+        .map-button:nth-child(22) { animation-delay: 0.66s; }
+        .map-button:nth-child(23) { animation-delay: 0.69s; }
+        .map-button:nth-child(24) { animation-delay: 0.72s; }
+        .map-button:nth-child(25) { animation-delay: 0.75s; }
+        .map-button:nth-child(26) { animation-delay: 0.78s; }
+        .map-button:nth-child(27) { animation-delay: 0.81s; }
+        .map-button:nth-child(28) { animation-delay: 0.84s; }
+        .map-button:nth-child(29) { animation-delay: 0.87s; }
+        .map-button:nth-child(30) { animation-delay: 0.9s; }
     </style>
 </head>
 <body>
@@ -364,7 +374,7 @@
                 </a>
                 <!-- Rechte Spalte - Grün -->
                 <a href="map15.html" class="map-button">
-                    <i class="fas fa-map"></i> Forge (InfinityBladeFireLands)
+                    <i class="fas fa-map"></i> Forge (InfinityBladeFireLands) - work in progress 🚧
                 </a>
                 
                 <!-- Linke Spalte - Violett -->
@@ -377,23 +387,66 @@
                 </a>
                 <!-- Rechte Spalte - Grün -->
                 <a href="map18.html" class="map-button">
-                    <i class="fas fa-map"></i> Map 18
+                    <i class="fas fa-map"></i> Ice Ruins (InfinityBladeIceLands)
                 </a>
                 
                 <!-- Linke Spalte - Violett -->
                 <a href="map19.html" class="map-button">
-                    <i class="fas fa-map"></i> Map 19
+                    <i class="fas fa-map"></i> Desert Ruins (InfinityBladeDesertLands)
                 </a>
                 <!-- Mittlere Spalte - Rot -->
                 <a href="map20.html" class="map-button">
                     <i class="fas fa-map"></i> Map 20
+                </a>
+                <!-- Rechte Spalte - Grün -->
+                <a href="map21.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 21
+                </a>
+                
+                <!-- Linke Spalte - Violett -->
+                <a href="map22.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 22
+                </a>
+                <!-- Mittlere Spalte - Rot -->
+                <a href="map23.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 23
+                </a>
+                <!-- Rechte Spalte - Grün -->
+                <a href="map24.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 24
+                </a>
+                
+                <!-- Linke Spalte - Violett -->
+                <a href="map25.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 25
+                </a>
+                <!-- Mittlere Spalte - Rot -->
+                <a href="map26.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 26
+                </a>
+                <!-- Rechte Spalte - Grün -->
+                <a href="map27.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 27
+                </a>
+                
+                <!-- Linke Spalte - Violett -->
+                <a href="map28.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 28
+                </a>
+                <!-- Mittlere Spalte - Rot -->
+                <a href="map29.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 29
+                </a>
+                <!-- Rechte Spalte - Grün -->
+                <a href="map30.html" class="map-button">
+                    <i class="fas fa-map"></i> Map 30
                 </a>
             </div>
         </main>
         
         <footer>
             <p>Map Selection Interface</p>
-            <p class="instruction">Click on a map to open it. 20 maps available.</p>
+            <p class="instruction">Click on a map to open it. 30 maps available.</p>
         </footer>
     </div>
 
@@ -427,7 +480,7 @@
             });
             
             // Simulate loading animation
-            console.log("Map selection loaded. 20 buttons are ready!");
+            console.log("Map selection loaded. 30 buttons are ready!");
         });
     </script>
 </body>
